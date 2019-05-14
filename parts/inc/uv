@@ -103,6 +103,13 @@ my_strnlen(const char *str, Size_t maxlen)
  * intended to work with modern perls, the tighter restrictions could be
  * relaxed.  khw thinks this is unlikely, but has been wrong in the past. */
 
+#if { VERSION < 5.10.0 }
+# define cU8 U8
+#else
+# define cU8 const U8
+#endif
+
+
 #ifndef utf8_to_uvchr_buf
    /* Choose which underlying implementation to use.  At least one must be
     * present or the perl is too early to handle this function */
@@ -121,7 +128,7 @@ my_strnlen(const char *str, Size_t maxlen)
 #  if { NEED utf8_to_uvchr_buf }
 
 UV
-utf8_to_uvchr_buf(pTHX_ const U8 *s, const U8 *send, STRLEN *retlen)
+utf8_to_uvchr_buf(pTHX_ cU8 *s, const U8 *send, STRLEN *retlen)
 {
     UV ret;
     STRLEN curlen;

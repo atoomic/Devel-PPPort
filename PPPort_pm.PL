@@ -127,8 +127,8 @@ for (@provided) {
       && exists $raw_base{$_})
   {
     if ($raw_base{$_}{version} == $raw_todo{$_}{version}) {
-      warn "$INCLUDE/$provides{$_} provides $_, which is still marked "
-           . "todo for " . format_version($raw_todo{$_}) . "\n";
+      check(0, "$INCLUDE/$provides{$_} provides $_, which is still marked "
+           . "todo for " . format_version($raw_todo{$_}));
     }
     else {
       check(2, "$_ was ported back to " . format_version($raw_todo{$_}{version})
@@ -261,7 +261,7 @@ sub include
   for (@{$data->{provides}}) {
     if (exists $provides{$_}) {
       if ($provides{$_} ne $file) {
-        warn "$file: $_ already provided by $provides{$_}\n";
+        check(0, "$file: $_ already provided by $provides{$_}");
       }
     }
     else {
@@ -408,7 +408,7 @@ sub expand_pp_expr
       }
     }
     else {
-      warn "found no prototype for $func\n";;
+      check(0, "found no prototype for $func");
     }
 
     $explicit{$func} = 'func';
@@ -476,8 +476,12 @@ sub check
 {
   my $level = shift;
 
-  if (exists $ENV{DPPP_CHECK_LEVEL} and $ENV{DPPP_CHECK_LEVEL} >= $level) {
-    print STDERR @_, "\n";
+  if ($level == 0 or (exists $ENV{DPPP_CHECK_LEVEL} and $ENV{DPPP_CHECK_LEVEL} >= $level)) {
+    if ($ENV{DPPP_CHECK_FOR_ERRORS}) {
+      die @_, "\n";
+    } else {
+      warn @_, "\n";
+    }
   }
 }
 

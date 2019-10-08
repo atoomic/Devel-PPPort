@@ -68,7 +68,7 @@ __UNDEFINED__ PERL_LOADMOD_IMPORT_OPS   0x4
 #if { NEED eval_pv }
 
 SV*
-eval_pv(const char *p, I32 croak_on_error)
+eval_pv(pTHX_ const char *p, I32 croak_on_error)
 {
     dSP;
     SV* errsv;
@@ -98,7 +98,7 @@ eval_pv(const char *p, I32 croak_on_error)
 #if { NEED vload_module }
 
 void
-vload_module(U32 flags, SV *name, SV *ver, va_list *args)
+vload_module(pTHX_ U32 flags, SV *name, SV *ver, va_list *args)
 {
     dTHR;
     dVAR;
@@ -155,7 +155,7 @@ vload_module(U32 flags, SV *name, SV *ver, va_list *args)
 #if { NEED load_module }
 
 void
-load_module(U32 flags, SV *name, SV *ver, ...)
+load_module(pTHX_ U32 flags, SV *name, SV *ver, ...)
 {
     va_list args;
     va_start(args, ver);

@@ -81,7 +81,7 @@ __UNDEFINED__  packWARN(a)              (a)
 #if { NEED warner }
 
 void
-warner(U32 err, const char *pat, ...)
+warner(pTHX_ U32 err, const char *pat, ...)
 {
   SV *sv;
   va_list args;
